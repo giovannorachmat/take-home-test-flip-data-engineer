@@ -1,0 +1,10 @@
+# Stage 2: Final image with PostgreSQL
+FROM postgres:latest
+
+# Set environment variables for PostgreSQL
+ENV POSTGRES_USER=user
+ENV POSTGRES_PASSWORD=password
+ENV POSTGRES_DB=my_database
+
+# Expose PostgreSQL port
+EXPOSE 5432

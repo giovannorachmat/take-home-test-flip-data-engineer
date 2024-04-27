@@ -1,5 +1,5 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9
+# Stage 1: Build FastAPI application
+FROM python:3.9 AS builder
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -8,17 +8,14 @@ ENV PYTHONUNBUFFERED 1
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the dependencies file to the working directory
+# Copy only the requirements file to the container
 COPY requirements.txt /app/
 
-# Install any dependencies
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the content of the local src directory to the working directory
-COPY ./app /app
+# Copy the entire FastAPI application to the container
+COPY . /app
 
 # Expose the port that FastAPI runs on
 EXPOSE 8000
-
-# Command to run the FastAPI application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

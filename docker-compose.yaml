@@ -10,7 +10,7 @@ services:
     depends_on:
       - postgres
     environment:
-      - DATABASE_URL=postgresql://user:password@postgres:5432/my_database
+      - DATABASE_URL=postgresql://user:password@postgres:5432/pokemon_db
 
   postgres:
     build:
@@ -19,6 +19,6 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=user
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=my_database
+      - POSTGRES_DB=pokemon_db

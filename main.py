@@ -1,27 +1,48 @@
+import fastapi
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import List, Annotated
+from typing import TYPE_CHECKING
+import models
 import requests
-# import models
-# from database import engine, SessionLocal
+import schemas
+import services
+import sqlalchemy.orm as orm
+import json
+# import pydantic
 
 # Initialize FastAPI app
-app = FastAPI(
-    title="Pokemon API",
-    description="This is a simple test",
-    docs_url="/"
-)
-# models.Base.metadata.create_all(bind=engine)
+app = FastAPI(title="Pokemon API", description="This is a simple test", docs_url="/")
 
-# # Pydantic model for normalized effect entries
-# class EffectEntry(BaseModel):
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
+
+
+# class BaseAbility(pydantic.BaseModel):
+#     loan_id: str
+#     user_id: str
+#     pokemon_ability_id: int
+
+
+# class LoanAbility(BaseAbility):
+#     effect: str
+#     language: str
 #     short_effect: str
 
+#     class Config:
+#         from_attributes = True
 
-# Route to receive input JSON
-@app.get("/ability/{pokemon_ability_id}")
-async def get_pokemon_ability(pokemon_ability_id: int):
-    url = f"https://pokeapi.co/api/v2/ability/{pokemon_ability_id}"
+
+# class CreateLoanAbility(BaseAbility):
+#     pass
+
+
+@app.post("/pokemon/", response_model=schemas.LoanAbility)
+async def create_ability(
+    # pokemon_ability_id: int,
+    loan_ability: schemas.CreateLoanAbility,
+    db: orm.Session = fastapi.Depends(services.get_db),
+):
+
+    url = "https://pokeapi.co/api/v2/ability/150"
 
     # Make request to PokeAPI
     response = requests.get(url)
@@ -33,53 +54,14 @@ async def get_pokemon_ability(pokemon_ability_id: int):
     # Normalize effect entries
     data = response.json()
     effect_entries = data["effect_entries"]
-    normalized_data = []
     for entry in effect_entries:
-        normalized_data.append(
-            {
-                "pokemon_ability_id": f"{pokemon_ability_id}",
-                "effect": entry["effect"],
-                "language": entry["language"],
-                "short_effect": entry["short_effect"],
-            }
+        loan_ability = schemas.LoanAbility(
+            loan_id = "9594641568",
+            user_id = "5199434",
+            pokemon_ability_id = 150,
+            effect=json.dumps(entry["effect"]),
+            language=json.dumps(entry["language"]),
+            short_effect=json.dumps(entry["short_effect"]),
         )
 
-    return normalized_data
-
-
-# @app.post("/pokemon/")
-# async def post_pokemon_ability(request_data: PokemonRequest):
-#     pokemon_ability_id = request_data.pokemon_ability_id
-#     url = f"https://pokeapi.co/api/v2/ability/{pokemon_ability_id}"
-
-#     # Make request to PokeAPI
-#     response = requests.get(url)
-#     if response.status_code != 200:
-#         raise HTTPException(
-#             status_code=response.status_code, detail="Pokémon ability not found"
-#         )
-
-#     # Normalize effect entries
-#     data = response.json()
-#     effect_entries = data["effect_entries"]
-#     normalized_short_effect_effect_entries = []
-#     for entry in effect_entries:
-#         normalized_short_effect_effect_entries.append(
-#             {"short_effect": entry["short_effect"]}
-#         )
-
-# # Store normalized effect entries in PostgreSQL
-# def get_db():
-#     db = SessionLocal()
-#     try:
-#         yield db
-#         # ability = Ability(name=data["name"], effect=str(normalized_data))
-#         # db.add(ability)
-#         # db.commit()
-#     except Exception as e:
-#         db.rollback()
-#         raise HTTPException(
-#             status_code=500, detail="Error occurred while saving data to database"
-#         )
-#     finally:
-#         db.close()
+    return await services.create_ability(loan_ability=loan_ability, db=db)

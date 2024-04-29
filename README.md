@@ -12,10 +12,10 @@ Execute this command in Terminal
 docker-compose up --build fastapi
 ```
 
-Open localhost:8000, then insert these parameters in POST and GET :
-- 9594641568 as loan_id
-- 5199434 as user_id
-- 150 as pokemon_ability_id
+Open `localhost:8000`, then insert these parameters in POST and GET :
+- 9594641568 for loan_id
+- 5199434 for user_id
+- 150 for pokemon_ability_id
 
 ## Check if the data is inserted in the table
 Execute this command in Terminal

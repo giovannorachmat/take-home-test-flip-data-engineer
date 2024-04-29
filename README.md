@@ -8,6 +8,17 @@ Execute this command in Terminal
 Execute this command in Terminal
 `docker-compose up --build fastapi`
 
+Open localhost:8000, then insert these parameters in POST and GET :
+- 9594641568 as loan_id
+- 5199434 as user_id
+- 150 as pokemon_ability_id
+
+## Check if the data is inserted in the table
+Execute this command in Terminal
+`psql -h localhost -p 5432 -U postgres -d pokemon_db` -- password: password
+`select * from abilities;`
+
+
 # If anything goes wrong
 
 ## Run the Postgres database

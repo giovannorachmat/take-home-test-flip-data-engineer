@@ -1,8 +1,6 @@
 from typing import TYPE_CHECKING
 
-import database
-import models
-import schemas
+import database as database
 
 if TYPE_CHECKING:
     from sqlalchemy.orm import Session

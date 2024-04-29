@@ -7,7 +7,6 @@ import schemas
 import services
 import sqlalchemy.orm as orm
 import models
-import json
 
 # Initialize FastAPI app
 app = FastAPI(title="Pokemon API", description="This is a simple test", docs_url="/")

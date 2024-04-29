@@ -1,8 +1,10 @@
-# Run the Postgres database
+# How to run the FastAPI x Postgres app
+
+## Run the Postgres database
 Execute this command in Terminal
 `docker-compose up --build postgres`
 
-# Run the FastAPI app
+## Run the FastAPI app
 Execute this command in Terminal
 `docker-compose up --build fastapi`
 

@@ -15,8 +15,11 @@ app = FastAPI(title="Pokemon API", description="This is a simple test", docs_url
 if TYPE_CHECKING:
     from sqlalchemy.orm import Session
 
+# Add abilities table to db
 services.add_tables()
 
+
+# Create FastAPI app to push data to db based on input, combined with data from PokeAPI
 @app.post("/pokemon/", response_model=List[schemas.LoanAbility])
 async def insert_loan_abilities(
     loan_id: str,
@@ -24,7 +27,7 @@ async def insert_loan_abilities(
     pokemon_ability_id: int,
     db: orm.Session = fastapi.Depends(services.get_db),
 ):
-    
+
     url = f"https://pokeapi.co/api/v2/ability/{pokemon_ability_id}"
 
     # Make request to get pokemon ability data
@@ -54,13 +57,13 @@ async def insert_loan_abilities(
         )
         loan_abilities.append(loan_ability)
 
-
     db.add_all(loan_abilities)
     db.commit()
 
     return loan_abilities
 
 
+# Create FastAPI app to return data from db based on input, combined with data from PokeAPI
 @app.get("/pokemon/")
 async def get_loan_abilities(
     loan_id: str,

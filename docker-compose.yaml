@@ -1,6 +1,17 @@
 version: '3'
 
 services:
+  postgres:
+    build: 
+      context: .
+      dockerfile: Dockerfile.postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pokemon_db
+    ports:
+      - "5432:5432"
+  
   fastapi:
     build:
       context: .
@@ -9,16 +20,3 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
-    environment:
-      - DATABASE_URL=postgresql://user:password@postgres:5432/pokemon_db
-
-  postgres:
-    build:
-      context: .
-      dockerfile: Dockerfile.postgres
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=pokemon_db

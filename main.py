@@ -15,6 +15,7 @@ app = FastAPI(title="Pokemon API", description="This is a simple test", docs_url
 if TYPE_CHECKING:
     from sqlalchemy.orm import Session
 
+services.add_tables()
 
 @app.post("/pokemon/", response_model=List[schemas.LoanAbility])
 async def insert_loan_abilities(
@@ -23,9 +24,10 @@ async def insert_loan_abilities(
     pokemon_ability_id: int,
     db: orm.Session = fastapi.Depends(services.get_db),
 ):
+    
     url = f"https://pokeapi.co/api/v2/ability/{pokemon_ability_id}"
 
-    # Make request to PokeAPI
+    # Make request to get pokemon ability data
     response = requests.get(url)
     if response.status_code != 200:
         raise HTTPException(
@@ -52,6 +54,7 @@ async def insert_loan_abilities(
         )
         loan_abilities.append(loan_ability)
 
+
     db.add_all(loan_abilities)
     db.commit()
 
@@ -65,7 +68,7 @@ async def get_loan_abilities(
     pokemon_ability_id: int,
     db: orm.Session = fastapi.Depends(services.get_db),
 ):
-    # Retrieve loan and user details from the database
+    # Retrieve data from the database
     loan_data = db.query(models.LoanAbility.loan_id).filter_by(loan_id=loan_id).all()
     user_data = db.query(models.LoanAbility.user_id).filter_by(user_id=user_id).all()
     pokemon_ability_data = (
@@ -91,8 +94,7 @@ async def get_loan_abilities(
     elif not pokemon_ability_data:
         raise HTTPException(status_code=404, detail="pokemon_ability_id not found")
 
-    # Retrieve language, effect, and short effect from the database
-
+    # Create return entry column with combining language, effect, and short_effect columns
     returned_entries = []
     for entry in language_effect_data:
         returned_entries.append(
@@ -104,14 +106,14 @@ async def get_loan_abilities(
         )
     url = f"https://pokeapi.co/api/v2/ability/{pokemon_ability_id}"
 
-    # Make request to PokeAPI
+    # Make request to get pokemon ability data
     response = requests.get(url)
     if response.status_code != 200:
         raise HTTPException(
             status_code=response.status_code, detail="Pokémon ability not found"
         )
 
-    # Normalize effect entries
+    # Create pokemon_list column by taking pokemon KV
     data = response.json()
     pokemon_list = [data["pokemon"][0]["pokemon"]["name"]]
 

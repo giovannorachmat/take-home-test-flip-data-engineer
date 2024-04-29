@@ -2,11 +2,15 @@
 
 ## Run the Postgres database
 Execute this command in Terminal
-`docker-compose up --build postgres`
+```
+docker-compose up --build postgres
+```
 
 ## Run the FastAPI app
 Execute this command in Terminal
-`docker-compose up --build fastapi`
+```
+docker-compose up --build fastapi
+```
 
 Open localhost:8000, then insert these parameters in POST and GET :
 - 9594641568 as loan_id
@@ -15,28 +19,45 @@ Open localhost:8000, then insert these parameters in POST and GET :
 
 ## Check if the data is inserted in the table
 Execute this command in Terminal
-`psql -h localhost -p 5432 -U postgres -d pokemon_db` -- password: password
-`select * from abilities;`
+```
+psql -h localhost -p 5432 -U postgres -d pokemon_db` -- password: password
+
+select * from abilities;
+```
 
 
 # If anything goes wrong
 
 ## Run the Postgres database
 Execute these commands in Terminal
-`docker pull postgres:alpine`
-`docker run --name postgres -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres:alpine`
-`docker exec -it postgres bash`
+```
+docker pull postgres:alpine
+docker run --name postgres -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres:alpine
+docker exec -it postgres bash
+```
 
 Get into the postgres db
-`psql -U postgres`
+```
+psql -U postgres
+```
 
 Execute these commands in Postgres
-`create database pokemon_db;`
-`create user postgres with encrypted password 'password;`
-`grant all privileges on database pokemon_db to postgres;`
-`\c pokemon_db`
-`psql -h postgres -p 5432 postgres`
+```
+create database pokemon_db;
+
+create user postgres with encrypted password 'password';
+
+grant all privileges on database pokemon_db to postgres;
+
+\c pokemon_db
+
+psql -h postgres -p 5432 postgres
+
+create table abilities;
+```
 
 ## Run the FastAPI app
 Execute these commands in Terminal -- install requirements first
-`uvicorn main:app --reload`
+```
+uvicorn main:app --reload
+```

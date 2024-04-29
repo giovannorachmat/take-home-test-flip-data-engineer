@@ -11,3 +11,9 @@ class LoanAbility(pydantic.BaseModel):
 
     class Config:
         from_attributes = True
+
+class PokemonResponse(pydantic.BaseModel):
+    loan_id: str
+    user_id: str
+    returned_entries: str
+    pokemon_list: str

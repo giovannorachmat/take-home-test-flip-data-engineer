@@ -16,13 +16,3 @@ def get_db():
         yield db
     finally:
         db.close()
-
-# async def create_ability(
-#     loan_ability: schemas.CreateLoanAbility,
-#     db: "Session"
-# ) -> schemas.LoanAbility:
-#     loan_ability = models.LoanAbility()
-#     db.add(loan_ability)
-#     db.commit()
-#     db.refresh(loan_ability)
-#     return schemas.LoanAbility.from_orm(loan_ability)

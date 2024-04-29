@@ -26,7 +26,7 @@ select * from abilities;
 ```
 
 
-# If anything goes wrong
+# Just in case the dockerfiles don't work
 
 ## Run the Postgres database
 Execute these commands in Terminal
